@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build: .
+    restart: always
+    command: "python authentication/manage.py runserver 0.0.0.0:8000"
+    volumes: 
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=django
+      - MYSQL_DATABASE=django
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=django
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
